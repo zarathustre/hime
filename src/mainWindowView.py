@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QMainWindow
 
 from src.mainWindow import Ui_MainWindow
 from src.createListView import CreateList
+from src.editListView import EditList
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -13,7 +14,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def assign_widgets(self):
         self.create_list_button.clicked.connect(lambda: self.create_list())
-        self.view_list_button.clicked.connect(lambda: self.view_list())
+        self.edit_list_button.clicked.connect(lambda: self.edit_list())
 
     def create_list(self):
         self.create_list_page = CreateList()
@@ -22,8 +23,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.create_list_page.submit_button.clicked.connect(\
             lambda: self.create_list_page.save_and_go_back(self.delete_objects_and_go_back))
 
-    def view_list(self):
-        pass
+    def edit_list(self):
+        self.edit_list_page = EditList()
+        self.add_widget_and_change_tab(self.main_window_stack, self.edit_list_page, 1)
+        self.edit_list_page.back_button.clicked.connect(lambda: self.delete_objects_and_go_back(self.edit_list_page))
 
     def add_widget_and_change_tab(self, stack, widget, tab):
         stack.addWidget(widget)

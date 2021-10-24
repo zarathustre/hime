@@ -37,10 +37,10 @@ class Ui_MainWindow(object):
         self.home_page.setObjectName(u"home_page")
         self.gridLayout = QGridLayout(self.home_page)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.view_list_button = QPushButton(self.home_page)
-        self.view_list_button.setObjectName(u"view_list_button")
+        self.edit_list_button = QPushButton(self.home_page)
+        self.edit_list_button.setObjectName(u"edit_list_button")
 
-        self.gridLayout.addWidget(self.view_list_button, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.edit_list_button, 0, 1, 1, 1)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.actionExit.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
-        self.view_list_button.setText(QCoreApplication.translate("MainWindow", u"View", None))
+        self.edit_list_button.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.create_list_button.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi

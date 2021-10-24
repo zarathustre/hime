@@ -1,6 +1,10 @@
 # VSCode Settings
 .vscode/
 
+# Database
+lists.db
+lists.db-journal
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
