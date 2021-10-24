@@ -13,8 +13,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.show()
 
     def assign_widgets(self):
-        self.create_list_button.clicked.connect(lambda: self.create_list())
-        self.edit_list_button.clicked.connect(lambda: self.edit_list())
+        self.create_list_button.clicked.connect(self.create_list)
+        self.edit_list_button.clicked.connect(self.edit_list)
 
     def create_list(self):
         self.create_list_page = CreateList()

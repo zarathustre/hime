@@ -15,7 +15,7 @@ class Database(object):
         if query[0:6].lower() == 'select':
             result = self.cursor.fetchall()
             self.cnx.close()
-            return result
+            return [result, self.cursor.description]
         else:
             self.cnx.commit()
             self.cnx.close()

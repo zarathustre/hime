@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QMessageBox
-from PySide6.QtGui import QStandardItemModel, QStandardItem 
-from PySide6.QtCore import Qt
+from PySide6.QtGui import QStandardItemModel, QStandardItem, QRegularExpressionValidator
+from PySide6.QtCore import Qt, QRegularExpression
 
 from src.createList import Ui_CreateListPage
 from src.databaseHandler import Database
@@ -18,12 +18,13 @@ class CreateList(QWidget, Ui_CreateListPage):
     def init_widgets(self):
         self.init_type_combo_box()
         self.init_tree_view()
+        self.validate_name_edit_input()
         self.remove_button.setEnabled(False)
         self.submit_button.setEnabled(False)
 
     def assign_widgets(self):
-        self.add_button.clicked.connect(lambda: self.add_entry())
-        self.remove_button.clicked.connect(lambda: self.remove_selected_entry())
+        self.add_button.clicked.connect(self.add_entry)
+        self.remove_button.clicked.connect(self.remove_selected_entry)
         self.columns_tree_view.selectionModel().selectionChanged.connect(self.on_selection_change)
         self.name_edit.textChanged.connect(self.on_name_text_changed)
 
@@ -38,6 +39,11 @@ class CreateList(QWidget, Ui_CreateListPage):
         self.columns_tree_view.setModel(self.items_model)
         self.columns_tree_view.header().setDefaultAlignment(Qt.AlignHCenter)
         self.columns_tree_view.setColumnWidth(0, 500)
+
+    def validate_name_edit_input(self):
+        regex = QRegularExpression("^[A-Za-z][A-Za-z0-9_]*$")
+        input_validator = QRegularExpressionValidator(regex, self.name_edit)
+        self.name_edit.setValidator(input_validator)
 
     def on_name_text_changed(self):
         if self.name_edit.text() == "":
@@ -85,18 +91,20 @@ class CreateList(QWidget, Ui_CreateListPage):
         db = Database()
         table_name = self.name_edit.text()
         table_exists_query = f"select * from sqlite_schema where type='table' and name='{table_name}'"
-        table_exists = db.query_db(table_exists_query)
+        table_exists = db.query_db(table_exists_query)[0]
         if not table_exists:
             return True
 
         return False
 
+    # TODO: create second table that links each table name with the corresponding column types
     def save_to_db(self):
         db = Database()
         table_name = self.name_edit.text()
+        tree_items = self.get_data_from_tree()
         create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY AUTOINCREMENT)"
         db.query_db(create_table_query)
-        for col,type in self.get_data_from_tree().items():
+        for col,type in tree_items.items():
             add_columns_query = f"ALTER TABLE {table_name} ADD {col} {type}"
             db.query_db(add_columns_query)
 
