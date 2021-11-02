@@ -108,6 +108,15 @@ class CreateList(QWidget, Ui_CreateListPage):
             add_columns_query = f"ALTER TABLE {table_name} ADD {col} {type}"
             db.query_db(add_columns_query)
 
+        create_types_table_query = "CREATE TABLE IF NOT EXISTS types (id INTEGER PRIMARY KEY AUTOINCREMENT, table TEXT, type TEXT)"
+        db.query_db(create_types_table_query)
+
+        types = tree_items.values()
+        types_str = ""
+        for type in types: types_str += f"{type}:"
+        insert_types_query = f"INSERT INTO types (table, type) VALUES ({table_name}, {types_str})"
+        db.query_db(insert_types_query)
+
     def save_and_go_back(self, delete_objects_and_go_back):
         if self.check_db_constraints():
             save_to_db_thread = threading.Thread(target=self.save_to_db)
